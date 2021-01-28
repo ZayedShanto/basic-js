@@ -8,6 +8,8 @@ Read different article of js and combine them in this repo
 - [Polyfilling](#polyfilling)
 - [Transpiling](#transpiling)
 - [Non-JavaScript](#non\-javascript)
+- [Cheating Lexical](#cheating-lexical)
+- [Eval](#eval)
 
 #
 #### Primitive in JS
@@ -65,3 +67,27 @@ The most common non-JavaScript JavaScript we'll encounter is the DOM API. For ex
 var el = document.getElementById( "foo" );
 ```
 The document variable exists as a global variable when our code is running in a browser. It's not provided by the JS engine, nor is it particularly controlled by the JavaScript specification. It takes the form of something that looks an awful lot like a normal JS object, but it's not really exactly that. It's a special object, often called a "host object."
+
+#### Cheating Lexical
+JavaScript has two such mechanisms ([eval](#eval), [with](#cheating-lexical)). The former can modify existing lexical scope (at runtime) by evaluating a string of "code" which has one or more declarations in it. The latter essentially creates a whole new lexical scope (again, at runtime) by treating an object reference as a "scope" and that object's properties as scoped identifiers. 
+
+The downside to these mechanisms is that it defeats the Engine's ability to perform compile-time optimizations regarding scope look-up, because the Engine has to assume pessimistically that such optimizations will be invalid. Code will run slower as a result of using either feature.
+
+Both of them are equally frowned-upon in the wider community as bad practices to use in your code. But the typical arguments against them are often missing the most important point: **cheating lexical scope leads to poorer performance.**
+
+#### Eval
+The eval(..) function in JavaScript takes a string as an argument, and treats the contents of the string as if it had actually been authored code at that point in the program. In other words, we can programmatically generate code inside of our authored code, and run the generated code as if it had been there at author time.
+```js
+function foo(str, a) {
+  eval( str ); // cheating!
+  console.log( a, b );
+}
+
+var b = 2;
+
+foo( "var b = 3;", 1 ); // 1 3
+```
+In fact, as mentioned above, this code actually creates variable b inside of foo(..) that shadows the b that was declared in the outer (global) scope.
+
+**Note:** eval(..) when used in a strict-mode program operates in its own lexical scope, which means declarations made inside of the eval() do not actually modify the enclosing scope.
+
