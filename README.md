@@ -10,6 +10,7 @@ Read different article of js and combine them in this repo
 - [Non-JavaScript](#non\-javascript)
 - [Cheating Lexical](#cheating-lexical)
 - [Eval](#eval)
+- [document.all](#documentall)
 
 #
 #### Primitive in JS
@@ -91,3 +92,27 @@ In fact, as mentioned above, this code actually creates variable b inside of foo
 
 **Note:** eval(..) when used in a strict-mode program operates in its own lexical scope, which means declarations made inside of the eval() do not actually modify the enclosing scope.
 
+#### document.all
+
+In DOM, we can see there is an `HTMLCollection` called `document.all`. Though it looks like array but it is not array. `typeof document.all` is `undefined`. But still we cant iterate it as it has a function `Symbol.iterator` in it's `__proto__`. But here main question is why it is falsy value though it has value. Because to detect `Old Browser`. `document.all` was used in old browser. But in modern browsers, the same purpose is served using `document.getElementByID`. Though modern browsers use `document.getElementById`, there is still support for `document.all` in many modern browsers. That's why if we cannot detect old browser by checking that property. That's why it is made `falsy` value so that it can be easily understood the browsers version. Example in code to solve this in different way:
+
+```
+if (document.all) {
+  // code that uses `document.all`, for ancient browsers
+} else if (document.getElementById) {
+  // code that uses `document.getElementById`, for “modern” browsers
+}
+```
+Basically, for a long time `document.all` was used in this way to detect old browsers. Because `document.all` is tested first though, more modern browsers that offer both properties, would still end up in the `document.all` code path. In modern browsers, we’d prefer to use `document.getElementById`, of course, but since most browsers still have `document.all` (for other backwards compatibility reasons) the else would never be accessed if `document.all` was truthy. Had the code been written differently, this wouldn’t be a problem:
+
+```
+if (document.getElementById) {
+  // code that uses `document.getElementById`, for “modern” browsers
+} else if (document.all) {
+  // code that uses `document.all`, for ancient browsers
+}
+```
+
+But sadly, a lot of existing code does it the other way around.
+
+The simplest fix for this problem is to simply make `document.all` be falsy in browsers that still mimic it.
