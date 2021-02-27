@@ -94,7 +94,7 @@ In fact, as mentioned above, this code actually creates variable b inside of foo
 
 #### document.all
 
-In DOM, we can see there is an `HTMLCollection` called `document.all`. Though it looks like array but it is not array. `typeof document.all` is `undefined`. But still we cant iterate it as it has a function `Symbol.iterator` in it's `__proto__`. But here main question is why it is falsy value though it has value. Because to detect `Old Browser`. `document.all` was used in old browser. But in modern browsers, the same purpose is served using `document.getElementByID`. Though modern browsers use `document.getElementById`, there is still support for `document.all` in many modern browsers. That's why if we cannot detect old browser by checking that property. That's why it is made `falsy` value so that it can be easily understood the browsers version. Example in code to solve this in different way:
+In DOM, we can see there is an `HTMLCollection` called `document.all`. Though it looks like array but it is not array. `typeof document.all` is `undefined`. But still we cant iterate it as it has a function `Symbol.iterator` in it's `__proto__`. But here main question is why it is falsy value though it has value. Because to detect `Old Browser`. `document.all` was used in old browser. But in modern browsers, the same purpose is served using `document.getElementById`. Though modern browsers use `document.getElementById`, there is still support for `document.all` in many modern browsers. That's why if we cannot detect old browser by checking that property. That's why it is made `falsy` value so that it can be easily understood the browsers version. Example in code to solve this in different way:
 
 ```
 if (document.all) {
