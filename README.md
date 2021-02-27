@@ -116,3 +116,5 @@ if (document.getElementById) {
 But sadly, a lot of existing code does it the other way around.
 
 The simplest fix for this problem is to simply make `document.all` be falsy in browsers that still mimic it.
+
+#### Difference between textContent, innerText, innerHTML
