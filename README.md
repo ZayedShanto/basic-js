@@ -11,6 +11,7 @@ Read different article of js and combine them in this repo
 - [Cheating Lexical](#cheating-lexical)
 - [Eval](#eval)
 - [document.all](#documentall)
+- [useRef](#useRef)
 
 #
 #### Primitive in JS
@@ -118,3 +119,26 @@ But sadly, a lot of existing code does it the other way around.
 The simplest fix for this problem is to simply make `document.all` be falsy in browsers that still mimic it.
 
 #### Difference between textContent, innerText, innerHTML
+
+
+#### forwardRef
+
+`forwardRef` is used to forward the reference of the dom to the child component;
+
+```
+const ChildComponent = (props, ref) => {
+  // component body
+}
+export default React.forwardRef(ChildComponent);
+```
+
+Now the parent component will be like this 
+
+```
+export default function ParentComponent() {
+  const refName = useRef(null);
+  return(
+    <ChildComponent ref={refName} otherProps/>
+  ) 
+}
+```
