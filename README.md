@@ -12,6 +12,7 @@ Read different article of js and combine them in this repo
 - [Eval](#eval)
 - [document.all](#documentall)
 - [forwardRef](#forwardRef)
+- [let and var setTimeout example](#let-and-var-setTimeout-example)
 
 #
 #### Primitive in JS
@@ -141,4 +142,51 @@ export default function ParentComponent() {
     <ChildComponent ref={refName} otherProps/>
   ) 
 }
+```
+
+#### let and var setTimeout example
+
+```
+function test() {
+  for(var i = 1; i<=5; i++) {
+    setTimeout(function(){
+      console.log(i);
+    }, i * 1000);
+  }
+}
+
+test();
+```
+The output will be `6 6 6 6 6`;
+
+To get rid of this, `let` can be used for its block scope concept. Every iterate, `let` create new reference but for `var` it will create only one reference of `i`. So if we use `let` instead of `var` the output will be `1 2 3 4 5`
+
+```
+function test() {
+  for(let i = 1; i<=5; i++) {
+    setTimeout(function(){
+      console.log(i);
+    }, i * 1000);
+  }
+}
+
+test();
+```
+
+Instead of using `let` we can still use `var` to solve this problem. In that case we have to understand `closure` more deeply. We have to provide new reference everytime for each `i`. Like this:
+
+```
+function test() {
+  for(var i = 1; i<=5; i++) {
+    function anotherTest(j) {
+      setTimeout(function(){
+        console.log(j);
+      }, j * 1000);
+    }
+    
+    anotherTest(i); 
+  }
+}
+
+test();
 ```
